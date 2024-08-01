@@ -18,18 +18,24 @@ import java.util.concurrent.TimeUnit;
 
 
 public class NewsApp extends Application {
+    private static NewsApp instance;
+
+    public static NewsApp getInstance() {
+        return instance;
+    }
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
     NewsService newsService = new NewsService(NewsRepoImpl.getInstance());
 
     @Override
     public void start(Stage stage) {
+        instance = this;
         // Main window shown on desktop
         Platform.runLater(() -> {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(NewsApp.class.getResource("main_view.fxml"));
                 VBox root = fxmlLoader.load();
-                Scene scene = new Scene(root, 1076, 760);
+                Scene scene = new Scene(root, 1076, 800);
 
                 // Add the loading image view to the scene's root layout
                 stage.setTitle("News Application");

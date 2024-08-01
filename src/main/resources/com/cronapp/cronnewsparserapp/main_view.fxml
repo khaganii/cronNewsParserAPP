@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fillWidth="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="763.0" prefWidth="1076.0" spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cronapp.cronnewsparserapp.controller.NewsController">
+<VBox fx:id="mainVBox" fillWidth="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1077.0" spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cronapp.cronnewsparserapp.controller.NewsController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -19,9 +19,13 @@
          <Insets bottom="1.0" left="472.0" top="-5.0" />
       </VBox.margin>
    </DatePicker>
+    <ImageView fx:id="loadingGif" fitHeight="43.0" fitWidth="55.0" visible="false">
+      <VBox.margin>
+         <Insets bottom="167.0" left="153.0" top="-53.0" />
+      </VBox.margin></ImageView>
     <Button onAction="#forceToGetLatestNews" text="Load The Latest News">
       <VBox.margin>
-         <Insets bottom="16.0" top="-48.0" />
+         <Insets bottom="16.0" top="-225.0" />
       </VBox.margin></Button>
    <Label fx:id="pageLbl" prefHeight="17.0" prefWidth="87.0" text="Current Page: ">
       <VBox.margin>
@@ -29,15 +33,22 @@
       </VBox.margin>
    </Label>
     <HBox spacing="10">
+        <Button onAction="#onLoadPreviousPageButtonClick" text="Load Previous Page">
+         <HBox.margin>
+            <Insets left="-131.0" right="16.0" />
+         </HBox.margin></Button>
         <Button onAction="#onLoadNextPageButtonClick" text="Load Next Page" />
       <VBox.margin>
-         <Insets left="504.0" />
+         <Insets left="496.0" />
       </VBox.margin>
     </HBox>
     <ListView fx:id="newsListView" minHeight="-Infinity" prefHeight="326.0" prefWidth="1097.0" />
     <HBox alignment="CENTER" prefHeight="30.0" prefWidth="1029.0">
-        <Button onAction="#onPreviousButtonClick" text="Previous" />
-        <Button onAction="#onNextButtonClick" prefHeight="17.0" prefWidth="43.0" text="Next" />
+        <Button onAction="#onPreviousButtonClick" text="Previous news" />
+        <Button minWidth="-Infinity" onAction="#onNextButtonClick" prefHeight="17.0" prefWidth="92.0" text="Next news">
+         <HBox.margin>
+            <Insets left="22.0" />
+         </HBox.margin></Button>
       <padding>
          <Insets left="55.0" right="40.0" />
       </padding>
@@ -90,4 +101,19 @@
         <VBox.margin>
             <Insets left="591.0" top="-260.0" />
         </VBox.margin></TextArea>
+   <Hyperlink fx:id="postUrlLink" prefHeight="25.0" prefWidth="707.0" textFill="#0070f8">
+      <VBox.margin>
+         <Insets bottom="5.0" left="320.0" top="5.0" />
+      </VBox.margin>
+      <font>
+         <Font size="13.0" />
+      </font></Hyperlink>
+
+    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="80.0" text="Post link: " textAlignment="CENTER" textFill="#0d0d0d" wrapText="true">
+      <font>
+         <Font size="14.0" />
+      </font>
+      <VBox.margin>
+         <Insets left="250.0" top="-50.0" />
+      </VBox.margin></Label>
 </VBox>
