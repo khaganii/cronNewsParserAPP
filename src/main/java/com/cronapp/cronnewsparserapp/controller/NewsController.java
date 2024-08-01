@@ -13,6 +13,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -24,7 +26,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class NewsController  implements Initializable {
+public class NewsController implements Initializable {
     private int currentPage;
     private int currentItem;
 
@@ -52,15 +54,15 @@ public class NewsController  implements Initializable {
     @FXML
     protected void onDatePickerChange() {
         currentItem = 0;
-        currentPage =1;
+        currentPage = 1;
         loadNewsForSelectedDate(currentPage);
         pageLbl.setText("Current Page: " + currentPage);
         newsListView.getSelectionModel().select(currentItem);
     }
 
     @FXML
-    public void onLoadNextPageButtonClick(){
-        if(lastListSize == size) currentPage++;
+    public void onLoadNextPageButtonClick() {
+        if (lastListSize == size) currentPage++;
         loadNewsForSelectedDate(currentPage);
         pageLbl.setText("Current Page: " + currentPage);
         currentItem = 0;
@@ -69,8 +71,8 @@ public class NewsController  implements Initializable {
     }
 
     @FXML
-    public void onLoadPreviousPageButtonClick(){
-        if(currentPage > 1) currentPage--;
+    public void onLoadPreviousPageButtonClick() {
+        if (currentPage > 1) currentPage--;
         loadNewsForSelectedDate(currentPage);
         pageLbl.setText("Current Page: " + currentPage);
         currentItem = 0;
@@ -78,15 +80,15 @@ public class NewsController  implements Initializable {
     }
 
     @FXML
-    public void onNextButtonClick(){
-        if(currentItem < currentNewsList.size()-1) currentItem++;
+    public void onNextButtonClick() {
+        if (currentItem < currentNewsList.size() - 1) currentItem++;
         newsListView.getSelectionModel().select(currentItem);
         setNews();
     }
 
     @FXML
-    public void onPreviousButtonClick(){
-        if(currentItem > 0) currentItem--;
+    public void onPreviousButtonClick() {
+        if (currentItem > 0) currentItem--;
         newsListView.getSelectionModel().select(currentItem);
         setNews();
     }
@@ -102,7 +104,6 @@ public class NewsController  implements Initializable {
         loadNewsForSelectedDate(currentPage);
         pageLbl.setText("Current Page: " + currentPage);
         newsListView.getSelectionModel().select(currentItem);
-
         newsListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) { //on double click
                 currentItem = newsListView.getSelectionModel().getSelectedIndex();
@@ -111,8 +112,9 @@ public class NewsController  implements Initializable {
         });
     }
 
-    private void setNews(){
-        //downloadAndReplaceImage(newsList.get(0).getHeaderImageUrl(), "/flower.jpg");
+    private void setNews() {
+        downloadAndReplaceImage(currentNewsList.get(currentItem).getHeaderImageUrl());
+        setImage();
         newsContentArea.setText(currentNewsList.get(currentItem).getTextContent());
         titleLbl.setText(currentNewsList.get(currentItem).getTitle());
         categoryLbl.setText(currentNewsList.get(currentItem).getCategory());
@@ -123,6 +125,11 @@ public class NewsController  implements Initializable {
         });
     }
 
+    private void setImage() {
+        String imagePath = "C:\\Users\\kabdullayev\\Desktop\\apps\\CronNewsParserApp\\src\\main\\resources\\temp.jpg";
+        Image image = new Image(imagePath, 440, 240, true, true);
+        newsImageView.setImage(image);
+    }
 
     private void loadNewsForSelectedDate(int page) {
         LocalDate selectedDate = datePicker.getValue();
@@ -132,8 +139,8 @@ public class NewsController  implements Initializable {
             for (NewsEntity news : currentNewsList) {
                 newsListView.getItems().add(getListedNews(news)); // Adjust if you want to display something else
             }
-            if(currentNewsList.size() > 0){
-                loadImage(currentNewsList.get(currentItem).getHeaderImageUrl());
+            if (currentNewsList.size() > 0) {
+                downloadAndReplaceImage(currentNewsList.get(currentItem).getHeaderImageUrl());
                 setNews();
             }
         }
@@ -173,113 +180,59 @@ public class NewsController  implements Initializable {
         new Thread(task).start();
     }
 
-    public void loadImage(String imageUrl) {
-        Task<Image> loadImageTask = new Task<Image>() {
-            @Override
-            protected Image call() throws Exception {
-                Image image = null;
-                try {
-                    URL url = new URL(imageUrl);
-                    URLConnection conn = url.openConnection();
-                    conn.setRequestProperty("User-Agent", "Chrome/126.0.6478.183");
-                    conn.connect();
-                    try (InputStream urlStream = conn.getInputStream()) {
-                        image = new Image(urlStream, 400, 240, true, true);
-                    }
-                } catch (IOException e) {
-                    System.out.println("Something went wrong, sorry: " + e.toString());
-                    e.printStackTrace();
+    public void downloadAndReplaceImage(String imageUrl) {
+        InputStream inputStream = null;
+        FileOutputStream outputStream = null;
+
+        try {
+            // Open a connection to the image URL
+            URL url = new URL(imageUrl);
+            URLConnection connection = url.openConnection();
+            // Uncomment if needed for specific user-agent requirements
+            connection.setRequestProperty("User-Agent", "Chrome/126.0.6478.183");
+
+            // Get input stream from the connection
+            inputStream = connection.getInputStream();
+
+            // Create output file (replace if exists)
+            File outputFile = new File("C:\\Users\\kabdullayev\\Desktop\\apps\\CronNewsParserApp\\src\\main\\resources\\temp.jpg");
+            outputStream = new FileOutputStream(outputFile);
+
+            // Buffer for data chunks
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+
+            // Write data to the file
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            System.out.println("Image downloaded and saved successfully!");
+
+        } catch (IOException e) {
+            System.err.println("Error downloading or saving the image: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            // Close streams
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
                 }
-                return image;
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+                System.err.println("Error closing streams: " + e.getMessage());
+                e.printStackTrace();
             }
-        };
-
-        loadImageTask.setOnSucceeded(event -> {
-            Image image = loadImageTask.getValue();
-            if (image != null) {
-                System.out.println("succeed to load image.");
-                newsImageView.setImage(image);
-
-                //create webp file and fill thi isage into this file
-                // Convert and save the image as WebP
-
-                System.out.println("Finished saving image.");
-//                try {
-//                    saveImageAsPng(image, "output.png");
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-                System.out.println("finish to load image.");
-            } else {
-                // Handle case where the image couldn't be loaded
-                System.out.println("Failed to load image.");
-            }
-        });
-
-        loadImageTask.setOnFailed(event -> {
-            Throwable exception = loadImageTask.getException();
-            exception.printStackTrace();
-            // Optionally, display a placeholder image or an error message
-        });
-
-
-        new Thread(loadImageTask).start();
+        }
     }
-
-
-//    public void downloadAndReplaceImage(String imageUrl, String outputFilePath) {
-//        InputStream inputStream = null;
-//        FileOutputStream outputStream = null;
-//
-//        try {
-//            // Open a connection to the image URL
-//            URL url = new URL(imageUrl);
-//            URLConnection connection = url.openConnection();
-//            connection.setRequestProperty("User-Agent", "Chrome/126.0.6478.183");
-//
-//            // Get input stream from the connection
-//            inputStream = connection.getInputStream();
-//
-//            // Create output file (replace if exists)
-//            File outputFile = new File(outputFilePath);
-//            outputStream = new FileOutputStream(outputFile);
-//
-//            // Buffer for data chunks
-//            byte[] buffer = new byte[4096];
-//            int bytesRead;
-//
-//            // Write data to the file
-//            while ((bytesRead = inputStream.read(buffer)) != -1) {
-//                outputStream.write(buffer, 0, bytesRead);
-//            }
-//
-//            System.out.println("Image downloaded and replaced successfully!");
-//
-//        } catch (IOException e) {
-//            System.err.println("Error downloading or saving the image: " + e.getMessage());
-//            e.printStackTrace();
-//        } finally {
-//            // Close streams
-//            try {
-//                if (inputStream != null) {
-//                    inputStream.close();
-//                }
-//                if (outputStream != null) {
-//                    outputStream.close();
-//                }
-//            } catch (IOException e) {
-//                System.err.println("Error closing streams: " + e.getMessage());
-//                e.printStackTrace();
-//            }
-//        }
-//        newsImageView.setImage(new Image("/flower.jpg",400, 240, true, true));
-//    }
 
     public String getListedNews(NewsEntity news) {
         return String.format("%s\t|\t%s\t|\t(%s)", news.getTitle(), news.getCategory().toUpperCase(), getFormattedDateTime(news.getPublicationTime()));
     }
 
-    public String getFormattedDateTime(Timestamp timestamp){
+    public String getFormattedDateTime(Timestamp timestamp) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm");
         return timestamp.toLocalDateTime().format(formatter);
     }

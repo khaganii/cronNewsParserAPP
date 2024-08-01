@@ -62,7 +62,7 @@
       </VBox.margin></ImageView>
 
     <HBox alignment="TOP_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="251.0">
-        <Label fx:id="titleLbl" minHeight="-Infinity" minWidth="-Infinity" prefHeight="69.0" prefWidth="251.0" text="-" wrapText="true">
+        <Label fx:id="titleLbl" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="69.0" prefWidth="251.0" text="-" wrapText="true">
          <HBox.margin>
             <Insets left="-16.0" top="7.0" />
          </HBox.margin>
