@@ -5,14 +5,7 @@ import com.cronapp.cronnewsparserapp.domains.NewsEntity;
 import com.cronapp.cronnewsparserapp.repos.Impls.NewsRepoImpl;
 import com.cronapp.cronnewsparserapp.scraping.NewsScraper;
 import com.cronapp.cronnewsparserapp.services.NewsService;
-import javafx.concurrent.Task;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,7 +17,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.concurrent.Task;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 
+import javax.imageio.ImageIO;
 
 public class NewsController implements Initializable {
     private int currentPage;
@@ -127,8 +128,11 @@ public class NewsController implements Initializable {
 
     private void setImage() {
         String imagePath = "C:\\Users\\kabdullayev\\Desktop\\apps\\CronNewsParserApp\\src\\main\\resources\\temp.jpg";
-        Image image = new Image(imagePath, 440, 240, true, true);
+        Image image = new Image(imagePath, 300, 240, true, true);
         newsImageView.setImage(image);
+        newsImageView.setFitWidth(300);
+        newsImageView.setFitHeight(240);
+        newsImageView.setPreserveRatio(false);
     }
 
     private void loadNewsForSelectedDate(int page) {
@@ -189,13 +193,13 @@ public class NewsController implements Initializable {
             URL url = new URL(imageUrl);
             URLConnection connection = url.openConnection();
             // Uncomment if needed for specific user-agent requirements
-            connection.setRequestProperty("User-Agent", "Chrome/126.0.6478.183");
+           // connection.setRequestProperty("User-Agent", "Chrome/126.0.6478.183");
 
             // Get input stream from the connection
             inputStream = connection.getInputStream();
 
             // Create output file (replace if exists)
-            File outputFile = new File("C:\\Users\\kabdullayev\\Desktop\\apps\\CronNewsParserApp\\src\\main\\resources\\temp.jpg");
+            File outputFile = new File("C:\\Users\\kabdullayev\\Desktop\\apps\\CronNewsParserApp\\src\\main\\resources\\temp.webp");
             outputStream = new FileOutputStream(outputFile);
 
             // Buffer for data chunks
@@ -207,8 +211,11 @@ public class NewsController implements Initializable {
                 outputStream.write(buffer, 0, bytesRead);
             }
 
-            System.out.println("Image downloaded and saved successfully!");
-
+            File jpgFile = new File("C:\\Users\\kabdullayev\\Desktop\\apps\\CronNewsParserApp\\src\\main\\resources\\temp.jpg");
+            if (!jpgFile.exists()) {
+                jpgFile.createNewFile();
+            }
+            convertWebPToJPG(outputFile.getPath(), "C:\\Users\\kabdullayev\\Desktop\\apps\\CronNewsParserApp\\src\\main\\resources\\temp.jpg");
         } catch (IOException e) {
             System.err.println("Error downloading or saving the image: " + e.getMessage());
             e.printStackTrace();
@@ -225,6 +232,16 @@ public class NewsController implements Initializable {
                 System.err.println("Error closing streams: " + e.getMessage());
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static void convertWebPToJPG(String webpPath, String jpgPath) {
+        try {
+            BufferedImage webpImage = ImageIO.read(new File(webpPath));
+            ImageIO.write(webpImage, "jpg", new File(jpgPath));
+        } catch (IOException e) {
+            System.err.println("Error converting image: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="mainVBox" fillWidth="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1077.0" spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cronapp.cronnewsparserapp.controller.NewsController">
+<VBox fx:id="mainVBox" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="803.0" prefWidth="1077.0" spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cronapp.cronnewsparserapp.controller.NewsController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -43,12 +43,18 @@
       </VBox.margin>
     </HBox>
     <ListView fx:id="newsListView" minHeight="-Infinity" prefHeight="326.0" prefWidth="1097.0" />
-    <HBox alignment="CENTER" prefHeight="30.0" prefWidth="1029.0">
-        <Button onAction="#onPreviousButtonClick" text="Previous news" />
-        <Button minWidth="-Infinity" onAction="#onNextButtonClick" prefHeight="17.0" prefWidth="92.0" text="Next news">
+    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="1029.0">
+        <Button alignment="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onPreviousButtonClick" prefHeight="30.0" prefWidth="91.0" text="Previous news">
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor></Button>
+        <Button alignment="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNextButtonClick" prefHeight="29.0" prefWidth="92.0" text="Next news">
          <HBox.margin>
             <Insets left="22.0" />
-         </HBox.margin></Button>
+         </HBox.margin>
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor></Button>
       <padding>
          <Insets left="55.0" right="40.0" />
       </padding>
@@ -56,22 +62,24 @@
          <Insets />
       </VBox.margin>
     </HBox>
-    <ImageView fx:id="newsImageView" fitHeight="242.0" fitWidth="290.0" preserveRatio="true">
+    <ImageView fx:id="newsImageView" disable="true" fitHeight="240.0" fitWidth="300.0" preserveRatio="true">
       <VBox.margin>
          <Insets left="4.0" top="-4.0" />
-      </VBox.margin></ImageView>
-
-    <HBox alignment="TOP_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="251.0">
-        <Label fx:id="titleLbl" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="69.0" prefWidth="251.0" text="-" wrapText="true">
+      </VBox.margin>
+      <viewport>
+         <Rectangle2D />
+      </viewport></ImageView>
+    <HBox alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="297.0">
+        <Label fx:id="titleLbl" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mouseTransparent="true" prefHeight="124.0" prefWidth="301.0" text="-" textOverrun="WORD_ELLIPSIS" underline="true" wrapText="true">
          <HBox.margin>
             <Insets left="-16.0" top="7.0" />
          </HBox.margin>
          <font>
-            <Font name="System Bold" size="19.0" />
+            <Font name="System Bold" size="17.0" />
          </font></Label>
-        <Label fx:id="categoryLbl" minHeight="-Infinity" minWidth="-Infinity" prefHeight="63.0" prefWidth="251.0" text="-" textFill="#d72f2f" wrapText="true">
+        <Label fx:id="categoryLbl" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="296.0" text="-" textFill="#d72f2f" wrapText="true">
          <HBox.margin>
-            <Insets left="-251.0" right="-88.0" top="89.0" />
+            <Insets left="-300.0" right="-135.0" top="141.0" />
          </HBox.margin>
          <VBox.margin>
             <Insets left="0.0" top="0.0" />
@@ -79,9 +87,9 @@
          <font>
             <Font size="25.0" />
          </font></Label>
-        <Label fx:id="publishedDateLbl" minHeight="-Infinity" minWidth="-Infinity" prefHeight="61.0" prefWidth="249.0" text="-" wrapText="true">
+        <Label fx:id="publishedDateLbl" minHeight="-Infinity" minWidth="-Infinity" prefHeight="39.0" prefWidth="302.0" text="-" wrapText="true">
          <HBox.margin>
-            <Insets left="-162.0" top="163.0" />
+            <Insets left="-164.0" top="188.0" />
          </HBox.margin>
          <VBox.margin>
             <Insets bottom="100.0" left="-54.0" top="-343.0" />
@@ -97,13 +105,13 @@
       </padding>
     </HBox>
 
-    <TextArea fx:id="newsContentArea" editable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="241.0" prefWidth="440.0">
+    <TextArea fx:id="newsContentArea" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="241.0" prefWidth="393.0" scaleShape="false" wrapText="true">
         <VBox.margin>
-            <Insets left="591.0" top="-260.0" />
+            <Insets left="643.0" top="-252.0" />
         </VBox.margin></TextArea>
    <Hyperlink fx:id="postUrlLink" prefHeight="25.0" prefWidth="707.0" textFill="#0070f8">
       <VBox.margin>
-         <Insets bottom="5.0" left="320.0" top="5.0" />
+         <Insets bottom="5.0" left="320.0" top="-7.0" />
       </VBox.margin>
       <font>
          <Font size="13.0" />

@@ -8,6 +8,7 @@ module com.cronapp.cronnewsparserapp {
     requires lombok;
     requires java.sql;
     requires org.jsoup;
+    requires java.desktop;
     opens com.cronapp.cronnewsparserapp to javafx.fxml;
     exports com.cronapp.cronnewsparserapp;
     exports com.cronapp.cronnewsparserapp.controller;
